@@ -10,8 +10,8 @@
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-display);
-  --color-dye: var(--dye);
-  --color-dye-foreground: var(--dye-foreground);
+  --color-done: var(--done);
+  --color-done-foreground: var(--done-foreground);
   --color-ochre: var(--ochre);
   --color-ochre-foreground: var(--ochre-foreground);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -53,7 +53,7 @@
 }
 
 :root {
-  /* Base: undyed cotton and indigo ink */
+  /* Base: warm off-white and deep indigo ink */
   --background: oklch(0.975 0.012 85);
   --foreground: oklch(0.22 0.05 270);
   --card: oklch(0.99 0.006 85);
@@ -61,7 +61,7 @@
   --popover: oklch(0.99 0.006 85);
   --popover-foreground: oklch(0.22 0.05 270);
 
-  /* Adire indigo */
+  /* Indigo */
   --primary: oklch(0.38 0.14 268);
   --primary-foreground: oklch(0.98 0.01 85);
   --secondary: oklch(0.93 0.03 268);
@@ -79,9 +79,9 @@
   /* Terracotta for delete and overdue */
   --destructive: oklch(0.55 0.17 35);
 
-  /* Custom: completed-task dye and warm ochre highlight */
-  --dye: oklch(0.9 0.045 268);
-  --dye-foreground: oklch(0.35 0.08 268);
+  /* Custom: completed tasks and warm ochre highlight */
+  --done: oklch(0.9 0.045 268);
+  --done-foreground: oklch(0.35 0.08 268);
   --ochre: oklch(0.75 0.13 75);
   --ochre-foreground: oklch(0.25 0.05 60);
 

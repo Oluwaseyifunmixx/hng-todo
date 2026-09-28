@@ -20,11 +20,11 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: {
-    default: "Indigo · Tasks, dyed to done",
-    template: "%s · Indigo",
+    default: "Clearday · Clear your mind. Own your day.",
+    template: "%s · Clearday",
   },
   description:
-    "An Adire-inspired to-do app. Plan your tasks and watch them take the dye as you get them done.",
+    "A calm, focused to-do app. Get every task out of your head and into one place, then work through them without the overwhelm.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
