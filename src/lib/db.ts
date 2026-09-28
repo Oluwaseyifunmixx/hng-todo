@@ -1,11 +1,4 @@
-import dns from "node:dns";
 import mongoose from "mongoose";
-
-// Some local networks refuse the SRV DNS lookups that "mongodb+srv://" URIs need.
-// In development only, use public DNS servers so the lookup succeeds.
-if (process.env.NODE_ENV === "development") {
-  dns.setServers(["8.8.8.8", "1.1.1.1"]);
-}
 
 type MongooseCache = {
   conn: typeof mongoose | null;
@@ -13,7 +6,6 @@ type MongooseCache = {
 };
 
 declare global {
-  // eslint-disable-next-line no-var
   var mongooseCache: MongooseCache | undefined;
 }
 
