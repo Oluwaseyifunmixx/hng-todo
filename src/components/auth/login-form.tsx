@@ -44,13 +44,14 @@ export function LoginForm() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
         <FormField
           id="email"
           label="Email"
           type="email"
           autoComplete="email"
           placeholder="you@example.com"
+          className="h-11"
           error={errors.email?.message}
           {...register("email")}
         />
@@ -58,10 +59,16 @@ export function LoginForm() {
           id="password"
           label="Password"
           autoComplete="current-password"
+          className="h-11"
           error={errors.password?.message}
           {...register("password")}
         />
-        <Button type="submit" size="lg" className="w-full" disabled={login.isPending}>
+        <Button
+          type="submit"
+          size="lg"
+          className="h-11 w-full"
+          disabled={login.isPending}
+        >
           {login.isPending ? "Logging in…" : "Log in"}
         </Button>
       </form>

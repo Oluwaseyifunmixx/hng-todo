@@ -52,12 +52,13 @@ export function RegisterForm() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
         <FormField
           id="name"
           label="Name"
           autoComplete="name"
           placeholder="Your name"
+          className="h-11"
           error={errors.name?.message}
           {...register("name")}
         />
@@ -67,6 +68,7 @@ export function RegisterForm() {
           type="email"
           autoComplete="email"
           placeholder="you@example.com"
+          className="h-11"
           error={errors.email?.message}
           {...register("email")}
         />
@@ -75,13 +77,14 @@ export function RegisterForm() {
           label="Password"
           autoComplete="new-password"
           placeholder="At least 8 characters"
+          className="h-11"
           error={errors.password?.message}
           {...register("password")}
         />
         <Button
           type="submit"
           size="lg"
-          className="w-full"
+          className="h-11 w-full"
           disabled={registerUser.isPending}
         >
           {registerUser.isPending ? "Creating account…" : "Create account"}
