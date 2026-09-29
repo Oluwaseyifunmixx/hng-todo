@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { FormField } from "@/components/form-field";
+import { PasswordField } from "@/components/password-field";
 import { useLogin } from "@/hooks/use-auth";
 import { ApiError } from "@/lib/api/client";
 import { loginSchema, type LoginInput } from "@/lib/validations/auth";
@@ -53,10 +54,9 @@ export function LoginForm() {
           error={errors.email?.message}
           {...register("email")}
         />
-        <FormField
+        <PasswordField
           id="password"
           label="Password"
-          type="password"
           autoComplete="current-password"
           error={errors.password?.message}
           {...register("password")}

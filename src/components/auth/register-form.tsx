@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { FormField } from "@/components/form-field";
+import { PasswordField } from "@/components/password-field";
 import { useRegister } from "@/hooks/use-auth";
 import { ApiError } from "@/lib/api/client";
 import { registerSchema, type RegisterInput } from "@/lib/validations/auth";
@@ -69,10 +70,9 @@ export function RegisterForm() {
           error={errors.email?.message}
           {...register("email")}
         />
-        <FormField
+        <PasswordField
           id="password"
           label="Password"
-          type="password"
           autoComplete="new-password"
           placeholder="At least 8 characters"
           error={errors.password?.message}
