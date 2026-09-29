@@ -15,7 +15,7 @@ export function Logo({ className, tone = "default" }: LogoProps) {
         aria-hidden="true"
         className={cn(
           "grid size-9 place-items-center rounded-lg",
-          isInverse ? "bg-primary-foreground" : "bg-primary"
+          isInverse ? "bg-panel-foreground" : "bg-primary"
         )}
       >
         <span className="size-4 rounded-full border-[3px] border-ochre" />
