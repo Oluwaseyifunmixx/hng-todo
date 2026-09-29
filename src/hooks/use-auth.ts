@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import {
   getCurrentUser,
   loginUser,
@@ -9,6 +8,13 @@ import {
 
 export const currentUserQueryKey = ["current-user"] as const;
 
+// Auth changes who the user is, so we do a full page load rather than a
+// client-side navigation. This discards any pages Next.js prefetched while
+// the user was logged out, so the proxy re-checks the new session cookie.
+function goTo(path: string) {
+  window.location.replace(path);
+}
+
 export function useCurrentUser() {
   return useQuery({
     queryKey: currentUserQueryKey,
@@ -17,40 +23,27 @@ export function useCurrentUser() {
 }
 
 export function useLogin() {
-  const router = useRouter();
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: loginUser,
-    onSuccess: (user) => {
-      queryClient.setQueryData(currentUserQueryKey, user);
-      router.replace("/");
-    },
+    onSuccess: () => goTo("/"),
   });
 }
 
 export function useRegister() {
-  const router = useRouter();
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: registerUser,
-    onSuccess: (user) => {
-      queryClient.setQueryData(currentUserQueryKey, user);
-      router.replace("/");
-    },
+    onSuccess: () => goTo("/"),
   });
 }
 
 export function useLogout() {
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: logoutUser,
     onSuccess: () => {
       queryClient.clear();
-      router.replace("/login");
+      goTo("/login");
     },
   });
 }
