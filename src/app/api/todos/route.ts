@@ -5,7 +5,7 @@ import { getCurrentUserId } from "@/lib/auth/session";
 import { jsonError, validationError } from "@/lib/api-response";
 import { escapeRegex } from "@/lib/escape-regex";
 import { toTodo } from "@/lib/todos/to-todo";
-import { sortTodos } from "@/lib/todos/sort-todo";
+import { sortTodos } from "@/lib/todos/sort-todos";
 import {
   createTodoSchema,
   todoListQuerySchema,
