@@ -11,11 +11,12 @@ const titleField = z
   .min(1, "Give your task a title")
   .max(200, "Keep the title under 200 characters");
 
-const notesField = z
+const notesText = z
   .string()
   .trim()
-  .max(2000, "Keep notes under 2,000 characters")
-  .nullable();
+  .max(2000, "Keep notes under 2,000 characters");
+
+const notesField = notesText.nullable();
 
 const dueDateField = z.iso
   .datetime({ message: "Choose a valid due date" })
@@ -51,5 +52,18 @@ export const todoListQuerySchema = z.object({
   category: categoryField.optional(),
 });
 
+export const todoFormSchema = z.object({
+  title: titleField,
+  notes: notesText,
+  dueDate: z.date().optional(),
+  dueTime: z.union([
+    z.literal(""),
+    z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Choose a valid time"),
+  ]),
+  priority: priorityField,
+  category: categoryField,
+});
+
 export type CreateTodoInput = z.infer<typeof createTodoSchema>;
 export type UpdateTodoInput = z.infer<typeof updateTodoSchema>;
+export type TodoFormValues = z.infer<typeof todoFormSchema>;

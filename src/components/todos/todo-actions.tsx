@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { MoreHorizontal, RotateCcw, Trash2 } from "lucide-react";
+import { MoreHorizontal, Pencil, RotateCcw, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -29,9 +30,10 @@ import type { Todo } from "@/types/todo";
 
 type TodoActionsProps = {
   todo: Todo;
+  onEdit: () => void;
 };
 
-export function TodoActions({ todo }: TodoActionsProps) {
+export function TodoActions({ todo, onEdit }: TodoActionsProps) {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const trashTodo = useTrashTodo();
   const restoreTodo = useRestoreTodo();
@@ -74,7 +76,7 @@ export function TodoActions({ todo }: TodoActionsProps) {
 
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
@@ -101,10 +103,17 @@ export function TodoActions({ todo }: TodoActionsProps) {
               </DropdownMenuItem>
             </>
           ) : (
-            <DropdownMenuItem variant="destructive" onSelect={handleTrash}>
-              <Trash2 />
-              Move to trash
-            </DropdownMenuItem>
+            <>
+              <DropdownMenuItem onSelect={onEdit}>
+                <Pencil />
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem variant="destructive" onSelect={handleTrash}>
+                <Trash2 />
+                Move to trash
+              </DropdownMenuItem>
+            </>
           )}
         </DropdownMenuContent>
       </DropdownMenu>
