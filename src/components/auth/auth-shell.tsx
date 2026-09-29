@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { PatternBackground } from "@/components/brand/pattern-background";
 import { Logo } from "@/components/brand/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -10,12 +9,10 @@ type AuthShellProps = {
 export function AuthShell({ children }: AuthShellProps) {
   return (
     <div className="grid min-h-svh flex-1 lg:grid-cols-2">
-      <aside className="relative hidden overflow-hidden bg-panel text-panel-foreground lg:flex lg:flex-col lg:justify-between lg:p-12">
-        <PatternBackground className="text-panel-foreground/10" />
+      <aside className="hidden bg-panel text-panel-foreground lg:flex lg:flex-col lg:justify-between lg:p-12">
+        <Logo tone="inverse" />
 
-        <Logo tone="inverse" className="relative" />
-
-        <div className="relative max-w-md space-y-4">
+        <div className="max-w-md space-y-4">
           <p className="font-heading text-5xl leading-tight font-semibold">
             Clear your mind. Own your day.
           </p>
@@ -25,7 +22,7 @@ export function AuthShell({ children }: AuthShellProps) {
           </p>
         </div>
 
-        <p className="relative text-sm text-panel-foreground/70">
+        <p className="text-sm text-panel-foreground/70">
           Due dates · Smart filters · A trash you can undo
         </p>
       </aside>
