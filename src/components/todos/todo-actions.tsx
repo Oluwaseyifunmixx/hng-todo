@@ -1,7 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { MoreHorizontal, Pencil, RotateCcw, Trash2 } from "lucide-react";
+import {
+  CalendarPlus,
+  Download,
+  MoreHorizontal,
+  Pencil,
+  RotateCcw,
+  Trash2,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,6 +33,12 @@ import {
   useRestoreTodo,
   useTrashTodo,
 } from "@/hooks/use-todos";
+import { downloadTextFile } from "@/lib/download-file";
+import {
+  createIcsFile,
+  getGoogleCalendarUrl,
+  getIcsFileName,
+} from "@/lib/todos/calendar";
 import type { Todo } from "@/types/todo";
 
 type TodoActionsProps = {
@@ -40,6 +53,23 @@ export function TodoActions({ todo, onEdit }: TodoActionsProps) {
   const deleteTodo = useDeleteTodoPermanently();
 
   const isTrashed = todo.deletedAt !== null;
+  const { dueDate } = todo;
+
+  function handleAddToGoogleCalendar() {
+    if (!dueDate) return;
+    const url = getGoogleCalendarUrl({ ...todo, dueDate });
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+
+  function handleDownloadIcs() {
+    if (!dueDate) return;
+    downloadTextFile(
+      getIcsFileName(todo.title),
+      createIcsFile({ ...todo, dueDate }),
+      "text/calendar;charset=utf-8"
+    );
+    toast.success("Calendar file downloaded");
+  }
 
   async function handleTrash() {
     try {
@@ -108,6 +138,19 @@ export function TodoActions({ todo, onEdit }: TodoActionsProps) {
                 <Pencil />
                 Edit
               </DropdownMenuItem>
+              {dueDate && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onSelect={handleAddToGoogleCalendar}>
+                    <CalendarPlus />
+                    Add to Google Calendar
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={handleDownloadIcs}>
+                    <Download />
+                    Download calendar file (.ics)
+                  </DropdownMenuItem>
+                </>
+              )}
               <DropdownMenuSeparator />
               <DropdownMenuItem variant="destructive" onSelect={handleTrash}>
                 <Trash2 />
