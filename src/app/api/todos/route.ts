@@ -87,3 +87,21 @@ export async function POST(request: Request) {
     return jsonError("Something went wrong. Please try again.", 500);
   }
 }
+
+export async function DELETE() {
+  const userId = await getCurrentUserId();
+
+  if (!userId) {
+    return jsonError("Not authenticated", 401);
+  }
+
+  try {
+    await connectToDatabase();
+    const { deletedCount } = await Todo.deleteMany({ userId });
+
+    return NextResponse.json({ deletedCount });
+  } catch (error) {
+    console.error("[todos:clear] Failed to clear todos:", error);
+    return jsonError("Something went wrong. Please try again.", 500);
+  }
+}

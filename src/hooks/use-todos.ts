@@ -5,9 +5,11 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import {
+  clearAllTodos,
   createTodo,
   deleteTodoPermanently,
   getTodos,
+  loadSampleTodos,
   restoreTodo,
   trashTodo,
   updateTodo,
@@ -72,6 +74,24 @@ export function useDeleteTodoPermanently() {
 
   return useMutation({
     mutationFn: deleteTodoPermanently,
+    onSuccess: () => invalidateTodos(),
+  });
+}
+
+export function useLoadSampleTodos() {
+  const invalidateTodos = useInvalidateTodos();
+
+  return useMutation({
+    mutationFn: loadSampleTodos,
+    onSuccess: () => invalidateTodos(),
+  });
+}
+
+export function useClearAllTodos() {
+  const invalidateTodos = useInvalidateTodos();
+
+  return useMutation({
+    mutationFn: clearAllTodos,
     onSuccess: () => invalidateTodos(),
   });
 }

@@ -12,6 +12,7 @@ import type { TodoCategory } from "@/types/todo";
 import { BoardHeader } from "./board-header";
 import { CategoryFilter } from "./category-filter";
 import { QuickAddTodo } from "./quick-add-todo";
+import { LoadSampleDataButton, SampleDataMenu } from "./sample-data-controls";
 import { TodoEmptyState } from "./todo-empty-state";
 import { TodoFormDialog } from "./todo-form-dialog";
 import { TodoList } from "./todo-list";
@@ -23,6 +24,7 @@ export function TodoBoard() {
   const { filters, setFilters } = useTodoFilters();
   const { data: todos, isPending, isError, refetch } = useTodos(filters);
   const isTrashView = filters.view === "trash";
+  const isFiltered = Boolean(filters.q || filters.category);
 
   const handleSearchChange = useCallback(
     (q: string) => setFilters({ q }),
@@ -51,10 +53,13 @@ export function TodoBoard() {
     }
 
     if (todos.length === 0) {
+      const showSampleAction = filters.view === "all" && !isFiltered;
+
       return (
         <TodoEmptyState
           view={filters.view}
-          isFiltered={Boolean(filters.q || filters.category)}
+          isFiltered={isFiltered}
+          action={showSampleAction ? <LoadSampleDataButton /> : undefined}
         />
       );
     }
@@ -66,10 +71,13 @@ export function TodoBoard() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <BoardHeader />
-        <Button size="lg" onClick={() => setIsCreateOpen(true)}>
-          <Plus />
-          New task
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <SampleDataMenu />
+          <Button size="lg" onClick={() => setIsCreateOpen(true)}>
+            <Plus />
+            New task
+          </Button>
+        </div>
       </div>
 
       <Tabs

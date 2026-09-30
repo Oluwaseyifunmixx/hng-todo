@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import {
   CircleCheck,
   ListTodo,
@@ -18,7 +19,7 @@ const VIEW_EMPTY_STATES: Record<TodoView, EmptyStateContent> = {
   all: {
     icon: ListTodo,
     title: "Your list is empty",
-    description: "Add your first task to get started.",
+    description: "Add your first task, or load sample data to explore every feature.",
   },
   active: {
     icon: Sparkles,
@@ -46,15 +47,16 @@ const FILTERED_EMPTY_STATE: EmptyStateContent = {
 type TodoEmptyStateProps = {
   view: TodoView;
   isFiltered: boolean;
+  action?: ReactNode;
 };
 
-export function TodoEmptyState({ view, isFiltered }: TodoEmptyStateProps) {
+export function TodoEmptyState({ view, isFiltered, action }: TodoEmptyStateProps) {
   const { icon: Icon, title, description } = isFiltered
     ? FILTERED_EMPTY_STATE
     : VIEW_EMPTY_STATES[view];
 
   return (
-    <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed px-6 py-16 text-center">
+    <div className="flex flex-col items-center gap-4 rounded-xl border border-dashed px-6 py-16 text-center">
       <div className="grid size-12 place-items-center rounded-full bg-secondary text-secondary-foreground">
         <Icon className="size-6" />
       </div>
@@ -62,6 +64,7 @@ export function TodoEmptyState({ view, isFiltered }: TodoEmptyStateProps) {
         <h2 className="text-lg font-semibold">{title}</h2>
         <p className="text-sm text-muted-foreground">{description}</p>
       </div>
+      {action}
     </div>
   );
 }

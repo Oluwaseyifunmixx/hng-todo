@@ -63,3 +63,11 @@ export async function restoreTodo(id: string): Promise<Todo> {
 export async function deleteTodoPermanently(id: string): Promise<void> {
   await apiRequest(`/api/todos/${id}/permanent`, { method: "DELETE" });
 }
+
+export async function loadSampleTodos(): Promise<void> {
+  await apiRequest("/api/todos/sample", { method: "POST" });
+}
+
+export async function clearAllTodos(): Promise<void> {
+  await apiRequest("/api/todos", { method: "DELETE" });
+}
