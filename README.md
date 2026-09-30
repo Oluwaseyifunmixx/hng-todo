@@ -6,9 +6,12 @@ A calm, focused full-stack to-do app. Get every task out of your head and into o
 
 **Live demo:** https://hng-todo-six.vercel.app
 
+No sign-up needed: open the link and start adding tasks, or click **Load sample data** to see every feature at once.
+
 ## Features
 
-- **Accounts**: register, log in and log out, with secure httpOnly cookie sessions
+- **Instant, private workspace**: no sign-in. Each browser automatically gets its own private list, saved in the database
+- **Sample data**: one click fills the app with realistic tasks; another returns it to its empty state
 - **Rich tasks**: title, notes, due date and time, priority (high, medium, low) and category (personal, work, study, shopping, health)
 - **Smart ordering**: unfinished tasks first, then by priority, then by the soonest due date
 - **Due-date awareness**: overdue tasks are flagged, and tasks due today are highlighted
@@ -26,7 +29,7 @@ A calm, focused full-stack to-do app. Get every task out of your head and into o
 | --- | --- |
 | Framework | Next.js 16 (App Router), React 19, TypeScript |
 | Database | MongoDB Atlas, Mongoose |
-| Auth | JWT (`jose`) in an httpOnly cookie, `bcryptjs` password hashing |
+| Sessions | Signed guest ID (JWT via `jose`) in an httpOnly cookie |
 | Validation | Zod, shared between the API and the forms |
 | Data fetching | TanStack Query |
 | Forms | react-hook-form |
@@ -54,7 +57,7 @@ Fill in `.env.local`:
 | Variable | Description |
 | --- | --- |
 | `MONGODB_URI` | Your MongoDB connection string, with `hng-todo` as the database name |
-| `JWT_SECRET` | A long random string. Generate one with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
+| `JWT_SECRET` | A long random string used to sign guest session cookies. Generate one with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` |
 
 In MongoDB Atlas, allow network access from your IP address (or `0.0.0.0/0` when deploying to Vercel).
 
@@ -78,16 +81,14 @@ Open http://localhost:3000.
 
 ## API
 
-All todo routes require an authenticated session and only ever return the current user's tasks.
+Every route works on the current visitor's own tasks only.
 
 | Method | Route | Description |
 | --- | --- | --- |
-| POST | `/api/auth/register` | Create an account and start a session |
-| POST | `/api/auth/login` | Log in |
-| POST | `/api/auth/logout` | Log out |
-| GET | `/api/auth/me` | Get the current user |
 | GET | `/api/todos?view=&q=&category=` | List tasks (`view`: all, active, completed, trash) |
 | POST | `/api/todos` | Create a task |
+| DELETE | `/api/todos` | Clear all tasks, including the trash |
+| POST | `/api/todos/sample` | Replace all tasks with sample data |
 | PATCH | `/api/todos/:id` | Update a task |
 | DELETE | `/api/todos/:id` | Move a task to the trash |
 | POST | `/api/todos/:id/restore` | Restore a task from the trash |
@@ -97,14 +98,13 @@ Errors always return `{ "error": "message" }`, with `fieldErrors` added for vali
 
 ## Design decisions
 
-- **Sessions in httpOnly cookies** rather than localStorage, so page scripts can never read the token.
-- **Register logs you straight in.** There's no email verification step, so asking users to retype the details they just entered adds friction without adding security.
-- **Undo instead of "Are you sure?" for trash**, because moving to the trash is reversible. Permanent deletion, which isn't, does ask for confirmation. The friction matches the risk.
-- **Calendar export instead of in-app reminders.** Reliable reminders need scheduled server jobs and push notifications. Handing the task to the user's own calendar gives dependable reminders on every device, using a tool they already trust.
+- **No sign-in, but still private.** On the first visit, the app issues a signed guest ID in an httpOnly cookie. Every database query is scoped to that ID, so each browser only ever sees its own tasks, and nobody has to create an account to try the app.
+- **Sample data replaces rather than adds**, so clicking it twice never creates duplicates, and "Clear all" always returns a clean empty state. Due dates are relative to the moment you load them, so there's always an overdue task, one due soon, and so on.
+- **Undo instead of "Are you sure?" for trash**, because moving to the trash is reversible. Permanent deletion and "Clear all", which aren't, ask for confirmation. The friction matches the risk.
+- **Calendar export instead of in-app reminders.** Reliable reminders need scheduled server jobs and push notifications. Handing the task to the user's own calendar gives dependable reminders on every device.
 - **Server-side filtering and search**, so the database does the work and only the tasks being shown travel to the browser.
 - **Filters in the URL**, so refreshing, sharing a link or using the back button all keep the same view.
 - **One set of validation rules**, shared by the API and the forms, so the two can never disagree.
-- **Login responses never reveal whether an email exists**: wrong email and wrong password return the same message.
 
 ## Project structure
 
