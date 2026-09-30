@@ -2,7 +2,7 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
 export const SESSION_COOKIE_NAME = "session";
-const SESSION_DURATION_SECONDS = 60 * 60 * 24 * 7; // 7 days
+export const SESSION_DURATION_SECONDS = 60 * 60 * 24 * 365; // 1 year
 
 type SessionPayload = {
   userId: string;
@@ -16,6 +16,13 @@ function getSecretKey(): Uint8Array {
   }
 
   return new TextEncoder().encode(secret);
+}
+
+// A random 24-character hex string: the same format as a MongoDB ObjectId,
+// so it works as the owner id on every todo.
+export function createGuestId(): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(12));
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
 export async function createSessionToken(userId: string): Promise<string> {
@@ -44,23 +51,6 @@ export async function verifySessionToken(
   } catch {
     return null;
   }
-}
-
-export async function setSessionCookie(token: string): Promise<void> {
-  const cookieStore = await cookies();
-
-  cookieStore.set(SESSION_COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: SESSION_DURATION_SECONDS,
-  });
-}
-
-export async function clearSessionCookie(): Promise<void> {
-  const cookieStore = await cookies();
-  cookieStore.delete(SESSION_COOKIE_NAME);
 }
 
 export async function getCurrentUserId(): Promise<string | null> {
